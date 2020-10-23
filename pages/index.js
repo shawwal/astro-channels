@@ -1,11 +1,10 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { Typography, Container, Grid } from '@material-ui/core';
-import { LensTwoTone } from '@material-ui/icons';
 
 const Home = ({ data }) => {
 
-  console.log('check', data)
+  console.log('check', data);
 
   return (
     <main className={styles.main}>
@@ -20,11 +19,6 @@ const Home = ({ data }) => {
         <Grid container spacing={2} item>
           {
             data.map((obj, index) => {
-
-              let timeStamp = Date.parse(obj.currentSchedule[0].datetime);
-              let dateObject =  new Date(timeStamp); 
-              const getTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-
               return (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <div className={styles.card}>
@@ -39,14 +33,22 @@ const Home = ({ data }) => {
                     </div>
                     <hr className={styles.borderTop} />
                     <div className={styles.channelDetails}>
-                      <div>
-                        <p>On Now</p>
-                        <p>{getTime}</p>
-                      </div>
-                      <div>
-                        <p>{obj.currentSchedule[0].title}</p>
-                        <p>test</p>
-                      </div>
+                      {
+                        obj.currentSchedule.slice(0, 3).map((schedule, i) => {
+
+                          let timeStamp = Date.parse(schedule.datetime);
+                          let dateObject = new Date(timeStamp);
+
+                          const scheduleTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+
+                          return (
+                            <div className={styles.schedule} key={i}>
+                              <span className={i == 0 ? styles.timeActive : styles.time}>{i == 0 ? 'On Now' : scheduleTime}</span>
+                              <span className={i == 0 ? styles.scheduleActive : styles.scheduleTitle}>{schedule.title}</span>
+                            </div>
+                          )
+                        })
+                      }
                     </div>
                   </div>
                 </Grid>
@@ -71,14 +73,11 @@ const Home = ({ data }) => {
 }
 
 export async function getStaticProps() {
-  // Call an external API endpoint to get posts.
-  // You can use any data fetching library
+  
   const fecthData = await fetch('https://contenthub-api.eco.astro.com.my/channel/all.json')
   const result = await fecthData.json();
   const data = result.response;
 
-  // By returning { props: posts }, the Blog component
-  // will receive `posts` as a prop at build time
   return {
     props: {
       data,

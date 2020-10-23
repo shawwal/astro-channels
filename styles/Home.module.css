@@ -47,16 +47,48 @@
 
 .channelTitle {
   margin-top: 4px;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
 .channelDetails {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   padding: 1rem;
-  color: #333333;
+  color: #888;
 }
 
+.schedule {
+  display: flex;
+  line-height: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.scheduleTitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;  
+  min-width: 145px;
+}
+
+.scheduleActive {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;  
+  min-width: 145px;
+  color: #333;
+}
+
+.time {
+  font-feature-settings: 'tnum';
+  min-width: 90px;
+}
+
+.timeActive {
+  font-feature-settings: 'tnum';
+  min-width: 90px;
+  color: #333;
+}
 
 .footer {
   width: 100%;
