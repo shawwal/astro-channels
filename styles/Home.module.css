@@ -8,12 +8,45 @@
   }
 }
 
+.filterRow {
+	display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer; 
+}
+
+.filterIcon {
+  height: 0.9rem;
+  padding-left: 0.5rem;
+}
+
+.drawerWidth {
+  width: 250px;
+}
+
 .card {
   overflow: hidden;
   position: relative;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   background-color: #fff;
+}
+
+.headerRow {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modifyDataRow {
+  /* border: 1px solid green; */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .header {
@@ -56,6 +89,7 @@
   flex-direction: column;
   padding: 1rem;
   color: #888;
+  min-height: 104px;
 }
 
 .schedule {
@@ -100,16 +134,11 @@
   align-items: center;
 }
 
-.footer img {
-  margin-left: 0.5rem;
-}
-
-.footer a {
+.footer p {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 
 .code {
   background: #fafafa;
@@ -118,9 +147,4 @@
   font-size: 1.1rem;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
-}
-
-
-.logo {
-  height: 1em;
 }
