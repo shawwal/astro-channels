@@ -1,15 +1,17 @@
 import React, { memo } from "react";
 import styles from '../styles/Channel.module.css';
 import { Grid, Typography } from '@material-ui/core';
+import Link from '../src/Link';
 
 const ChannelList = ({ data }) => {
-  // console.log('render');
+
   return (
     data.length === 0 ? <Grid container justify="center"><Typography>No Channel Found</Typography></Grid> :
       data.map((obj, index) => {
         return (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <div className={styles.card}>
+
+            <div className={styles.card} onClick={() => window.location = '/channel?TV=' + obj.id}>
               <div className={styles.header}>
                 <div className={styles.imgWrapper}>
                   <img className={styles.channellogo} src={obj.imageUrl} />
