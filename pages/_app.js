@@ -3,11 +3,34 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from '../src/theme';
+import { createMuiTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { red } from '@material-ui/core/colors';
 import '../styles/globals.css';
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
+
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light',
+          primary: {
+            main: '#E6007D',
+          },
+          secondary: {
+            main: '#19857b',
+          },
+          error: {
+            main: red.A400,
+          },
+        },
+      }),
+    [prefersDarkMode],
+  );
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -20,7 +43,7 @@ export default function MyApp(props) {
   return (
     <React.Fragment>
       <Head>
-        <title>My page</title>
+        <title>Astro Channels</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>

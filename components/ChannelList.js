@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import styles from '../styles/Channel.module.css';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Card } from '@material-ui/core';
 import Link from '../src/Link';
 
 const ChannelList = ({ data }) => {
@@ -11,14 +11,14 @@ const ChannelList = ({ data }) => {
         return (
           <Grid item xs={12} sm={6} md={4} key={index}>
 
-            <div className={styles.card} onClick={() => window.location = '/channel?TV=' + obj.id}>
+            <Card variant="outlined" className={styles.card} onClick={() => window.location = '/channel?TV=' + obj.id}>
               <div className={styles.header}>
                 <div className={styles.imgWrapper}>
                   <img className={styles.channellogo} src={obj.imageUrl} />
                 </div>
                 <div className={styles.channelWrapper}>
-                  <p>CH{obj.stbNumber}</p>
-                  <p className={styles.channelTitle}>{obj.title}</p>
+                  <Typography>CH{obj.stbNumber}</Typography>
+                  <Typography className={styles.channelTitle}>{obj.title}</Typography>
                 </div>
               </div>
               <hr className={styles.borderTop} />
@@ -50,7 +50,7 @@ const ChannelList = ({ data }) => {
                   })
                 }
               </div>
-            </div>
+            </Card>
           </Grid>
         )
       })
