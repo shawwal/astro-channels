@@ -1,0 +1,82 @@
+.card {
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  padding: 1rem;
+}
+
+.imgWrapper {
+  display: flex;
+  width: 72px;
+  height: 40px;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.channellogo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.channelWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.channelTitle {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.borderTop {
+  border: 1px solid #f7f7f7;
+  margin: 0;
+}
+
+.channelDetails {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  color: #888;
+  min-height: 104px;
+}
+
+.schedule {
+  display: flex;
+  line-height: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.scheduleTitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;  
+  min-width: 145px;
+}
+
+.scheduleActive {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;  
+  min-width: 145px;
+  color: #333;
+}
+
+.time {
+  font-feature-settings: 'tnum';
+  min-width: 90px;
+}
+
+.timeActive {
+  font-feature-settings: 'tnum';
+  min-width: 90px;
+  color: #333;
+}
