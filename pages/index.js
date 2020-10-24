@@ -51,7 +51,6 @@ const Home = ({ data }) => {
     const results = initialData.filter(obj =>
       obj.title.toLowerCase().includes(searchTerm)
     );
-    console.log('triggered');
     setChannelData(results);
   }, [searchTerm]);
 
@@ -63,8 +62,9 @@ const Home = ({ data }) => {
         <Head>
           <title>Astro Channels List</title>
           <link rel="icon" href="/favicon.ico" />
+          <meta name="description" content="Astro Channels List" />
+          <meta name="keywords" content="Astro, Channels, TV" />
         </Head>
-
         {/* <SwipeableDrawer
           anchor="right"
           open={open}

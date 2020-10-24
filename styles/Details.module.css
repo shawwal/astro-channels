@@ -1,0 +1,29 @@
+.channellogo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imgWrapper {
+  display: flex;
+  width: 72px;
+  height: 40px;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.channelHeader {
+  display: flex;
+  padding: 1rem 0;
+}
+
+.channelWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.channelTitle {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
