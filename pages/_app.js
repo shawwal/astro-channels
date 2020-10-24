@@ -11,7 +11,7 @@ import '../styles/globals.css';
 export default function MyApp(props) {
   const { Component, pageProps } = props;
 
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: light)');
 
   const theme = React.useMemo(
     () =>

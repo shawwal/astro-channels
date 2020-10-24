@@ -18,7 +18,7 @@ const ChannelList = ({ data }) => {
                 </div>
                 <div className={styles.channelWrapper}>
                   <Typography>CH{obj.stbNumber}</Typography>
-                  <Typography className={styles.channelTitle}>{obj.title}</Typography>
+                  <Typography className={styles.channelTitle}><strong>{obj.title}</strong></Typography>
                 </div>
               </div>
               <hr className={styles.borderTop} />
