@@ -1,9 +1,9 @@
 .card {
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  background-color: #fff;
+  /* overflow: hidden;
+  position: relative; */
+  /* box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2); */
+  /* border-radius: 4px; */
+  /* background-color: #fff; */
   cursor: pointer;
 }
 
@@ -46,7 +46,7 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  color: #888;
+  /* color: #888; */
   min-height: 104px;
 }
 
@@ -68,7 +68,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;  
   min-width: 145px;
-  color: #333;
+  /* color: #333; */
+  font-weight: bold;
 }
 
 .time {
@@ -79,5 +80,6 @@
 .timeActive {
   font-feature-settings: 'tnum';
   min-width: 90px;
-  color: #333;
+  /* color: #333; */
+  font-weight: bold;
 }
