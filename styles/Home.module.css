@@ -15,13 +15,38 @@
   cursor: pointer; 
 }
 
+.filterText {
+  padding-right: 0.5rem;
+}
+
 .filterIcon {
   height: 0.9rem;
   padding-left: 0.5rem;
+  cursor: pointer;
 }
 
-.drawerWidth {
-  width: 250px;
+.drawerStyle {
+  padding: 1rem;
+  width: 300px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chipsStyle {
+  padding: 30px;
+}
+
+.closeIcon {
+  text-align: right;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.rowEnd {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .headerRow {
@@ -33,7 +58,6 @@
 }
 
 .modifyDataRow {
-  /* border: 1px solid green; */
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
