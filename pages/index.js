@@ -16,7 +16,7 @@ const Home = ({ data }) => {
 
   const searchByName = e => {
     e.preventDefault();
-    console.log('ok');
+    // console.log('ok');
   }
 
   const handleSortByName = async () => {
@@ -55,6 +55,7 @@ const Home = ({ data }) => {
     setChannelData(results);
   }, [searchTerm]);
 
+  console.log('test', data);
 
 
   return (
@@ -129,7 +130,7 @@ const Home = ({ data }) => {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 
   const fecthData = await fetch('https://contenthub-api.eco.astro.com.my/channel/all.json')
   const result = await fecthData.json();
