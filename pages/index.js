@@ -1,11 +1,29 @@
 import Head from 'next/head';
-import React, { useEffect, useState, memo, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styles from '../styles/Home.module.css';
-import { Button, Container, Grid, SwipeableDrawer, Typography, TextField } from '@material-ui/core';
+import FilterButton from '../components/FilterButton';
+import CloseButton from '../components/CloseButton';
+import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
 import ChannelList from '../components/ChannelList';
+import { makeStyles } from '@material-ui/core/styles';
+import { themeAtom } from '../src/atoms';
+import { useRecoilState } from 'recoil';
+
+const useStyles = makeStyles((theme) => ({
+  chips: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
+}));
 
 const Home = ({ data }) => {
 
+  const classes = useStyles();
+  const [themeValue, setThemeValue] = useRecoilState(themeAtom);
   const [open, setOpen] = useState(false);
   const initialData = data;
   // console.log('check', initialData);
@@ -16,7 +34,7 @@ const Home = ({ data }) => {
 
   const searchByName = e => {
     e.preventDefault();
-    console.log('ok');
+    // console.log('ok');
   }
 
   const handleSortByName = async () => {
@@ -51,12 +69,17 @@ const Home = ({ data }) => {
   useEffect(() => {
     // window.scrollTo(0, 0);
     const results = initialData.filter(obj =>
-    obj.title.toLowerCase().includes(searchTerm.toLowerCase()));
+      obj.title.toLowerCase().includes(searchTerm.toLowerCase()));
     setChannelData(results);
   }, [searchTerm]);
 
+  const [switchChecked, setSwitch] = useState(themeValue == 'dark' ? true : false);
+  const handleSwitch = () => {
+    setSwitch(switchChecked == true ? false : true);
+    setThemeValue(themeValue == 'dark' ? 'light' : 'dark');
+  }
 
-
+  // console.log('test', data);
   return (
     <main className={styles.main}>
       <Container maxWidth="lg">
@@ -66,31 +89,72 @@ const Home = ({ data }) => {
           <meta name="description" content="Astro Channels List" />
           <meta name="keywords" content="Astro, Channels, TV" />
         </Head>
-        {/* <SwipeableDrawer
+        <SwipeableDrawer
           anchor="right"
           open={open}
           onOpen={() => handleDrawerOpen()}
           onClose={() => handleDrawerClose()}
         >
-          <div className={styles.drawerWidth}>
-            <Typography>Test</Typography>
+          <div className={styles.drawerStyle}>
+            <div>
+              <div className={styles.rowEnd} onClick={() => handleDrawerClose()}>
+                <img
+                  src="/close.svg"
+                  alt="Close Icon"
+                  className={styles.closeIcon}
+                />
+              </div>
+              <Typography>Categories</Typography>
+              <div className={classes.chips}>
+                <Chip label="Movies" />
+                <Chip label="Sport" />
+                <Chip label="Kids" />
+                <Chip label="Learning" />
+                <Chip label="Music" />
+                <Chip label="News" />
+                <Chip label="Lifestyle" />
+                <Chip label="Variety Entertainment" />
+                <Chip label="Special Interest" />
+                <Chip label="Radio" />
+              </div>
+              <Typography>Languages</Typography>
+              <div className={classes.chips}>
+                <Chip label="International" />
+                <Chip label="Malay" />
+                <Chip label="Chinese" />
+                <Chip label="Indian" />
+                <Chip label="Korean & Japanese" />
+                <Chip label="Multiple Languages" />
+              </div>
+              <Typography>Resolution</Typography>
+              <div className={classes.chips}>
+                <Chip label="SD" />
+                <Chip label="HD" />
+              </div>
+            </div>
+            <div>
+              <Button variant="outlined">RESET</Button> <Button variant="contained" color="primary">APPLY</Button>
+            </div>
           </div>
-        </SwipeableDrawer> */}
+        </SwipeableDrawer>
 
         <div className={styles.headerRow}>
           <Typography variant="h5" component="h2">Channels</Typography>
           <div className={styles.filterRow} onClick={() => handleDrawerOpen()}>
-            <Typography variant="subtitle1">Filter</Typography>
-            <img src="/filter.svg" alt="Filter Icon" className={styles.filterIcon} />
+            <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
+            <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
+            {/* <img
+              src="/filter.svg"
+              alt="Filter Icon"
+              style={{
+                height: '0.9rem',
+                paddingLeft: '0.5rem',
+                cursor: 'pointer'
+              }}
+            /> */}
           </div>
         </div>
         <div className={styles.headerRow}>
-          {/* <TextField
-            variant="outlined"
-            label="Search by Title"
-            value={searchValue}
-            onChange={() => setSearchValue(searchValue)}
-          /> */}
           <form>
             <TextField
               type="text"
@@ -100,12 +164,13 @@ const Home = ({ data }) => {
               value={searchTerm}
               onChange={handleChange}
             />
-            {/* <ul>
-              {searchResults.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul> */}
           </form>
+          <FormControlLabel
+            control={
+              <Switch checked={switchChecked} color="primary" onChange={handleSwitch} />
+            }
+            label="Dark Mode"
+          />
         </div>
         {/* <div className={styles.modifyDataRow}>
           <Button onClick={() => handleReset()} variant="outlined">reset</Button>
@@ -115,7 +180,7 @@ const Home = ({ data }) => {
           container
           spacing={2}
           item
-          // justify="center"
+        // justify="center"
         >
           <ChannelList data={channelData} />
         </Grid>
@@ -129,7 +194,7 @@ const Home = ({ data }) => {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 
   const fecthData = await fetch('https://contenthub-api.eco.astro.com.my/channel/all.json')
   const result = await fecthData.json();
