@@ -24,7 +24,7 @@ const ChannelList = ({ data }) => {
                 </div>
                 <div className={styles.channelWrapper}>
                   <Typography>CH{obj.stbNumber}</Typography>
-                  <Typography className={styles.channelTitle}><strong>{obj.title}</strong></Typography>
+                  <p className={styles.channelTitle}><strong>{obj.title}</strong></p>
                 </div>
               </div>
               <hr className={styles.borderTop} />
@@ -37,8 +37,8 @@ const ChannelList = ({ data }) => {
                       <div className={styles.schedule} key={i}>
                         {schedule.title == 'Not Available' ?
                           <>
-                            <span className={i == 0 ? styles.timeActive : styles.time}>N/A</span>
-                            <span className={i == 0 ? styles.timeActive : styles.time}>No Information Available</span>
+                            <span className={i == 0 ? styles.timeActive : styles.time}>{scheduleTime ? scheduleTime : 'N/A'}</span>
+                            <span className={i == 0 ? styles.timeActive : styles.time}>{schedule.title}</span>
                           </>
                           :
                           <>

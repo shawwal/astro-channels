@@ -33,3 +33,12 @@
   width: 79px;
   cursor: pointer;
 }
+
+.scheduleItems {
+  padding: 7px 0px;
+  /* border: 1px solid red; */
+}
+
+.scheduleTitle {
+  margin-left: 10px;
+}

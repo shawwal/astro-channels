@@ -8,6 +8,7 @@ const Home = ({ data }) => {
 
   const [open, setOpen] = useState(false);
   const initialData = data;
+  // console.log('check', initialData);
   const [channelData, setChannelData] = useState(initialData);
   const [newData, setNewData] = useState('Sort By Channel Number');
 

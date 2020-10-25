@@ -54,8 +54,6 @@ const ChannelDetails = ({ data }) => {
         </div>
         <p>{data.description}</p>
 
-        {/* {console.log('data', scheduleList[value])} */}
-
         <Tabs
           value={value}
           onChange={handleChange}
@@ -80,20 +78,20 @@ const ChannelDetails = ({ data }) => {
             )
           })}
         </Tabs>
-        {/* {console.log('check item', scheduleList)} */}
         {scheduleList.map((schedule, tabIndex) => {
-
           return (
             <TabPanel key={tabIndex} value={value} index={tabIndex}>
-              <ul>
+              <div>
                 {schedule.map((item, i) => {
                   let itemDate = moment(item.datetime);
                   const scheduleTime = moment(itemDate, 'ddd DD-MMM-YYYY, hh:mm A').format('hh:mm A');
                   return (
-                    <li style={{ listStyleType: 'none' }} key={i}>{scheduleTime + '  ' + item.title}</li>
+                    <div className={styles.scheduleItems} key={i}>
+                      <span>{scheduleTime}</span><span className={styles.scheduleTitle}>{item.title}</span>
+                    </div>
                   )
                 })}
-              </ul>
+              </div>
             </TabPanel>
           )
         })}
