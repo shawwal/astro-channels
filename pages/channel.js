@@ -3,15 +3,11 @@ import Head from 'next/head';
 import { Container, Tabs, Tab } from '@material-ui/core';
 import TabPanel from '../components/TabPannel';
 import styles from '../styles/Details.module.css';
-
+import moment from 'moment';
+import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  root: {
-    padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center',
-  },
   tabWidth: {
     minWidth: 50
   }
@@ -20,6 +16,7 @@ const useStyles = makeStyles(() => ({
 const ChannelDetails = ({ data }) => {
 
   const classes = useStyles();
+  const router = useRouter()
   const scheduleDate = Object.keys(data.schedule);
   const scheduleList = Object.values(data.schedule);
 
@@ -28,7 +25,6 @@ const ChannelDetails = ({ data }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
 
   return (
     <main>
@@ -41,6 +37,12 @@ const ChannelDetails = ({ data }) => {
       </Head>
 
       <Container maxWidth="md">
+        <div
+          className={styles.backButton}
+          onClick={() => router.push('/')}
+        >
+          ⇦ Go Back
+        </div>
         <div className={styles.channelHeader}>
           <div className={styles.imgWrapper}>
             <img className={styles.channellogo} src={data.imageUrl} />
@@ -51,8 +53,6 @@ const ChannelDetails = ({ data }) => {
           </div>
         </div>
         <p>{data.description}</p>
-
-        {/* {console.log('data', scheduleList[value])} */}
 
         <Tabs
           value={value}
@@ -78,26 +78,25 @@ const ChannelDetails = ({ data }) => {
             )
           })}
         </Tabs>
-        {/* {console.log('check item', scheduleList)} */}
         {scheduleList.map((schedule, tabIndex) => {
-
           return (
             <TabPanel key={tabIndex} value={value} index={tabIndex}>
-              <ul>
+              <div>
                 {schedule.map((item, i) => {
-                  let timeStamp = Date.parse(item.datetime);
-                  let dateObject = new Date(timeStamp);
-                  const scheduleTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+                  let itemDate = moment(item.datetime);
+                  const scheduleTime = moment(itemDate, 'ddd DD-MMM-YYYY, hh:mm A').format('hh:mm A');
                   return (
-                    <li style={{ listStyleType: 'none' }} key={i}>{scheduleTime + '  ' + item.title}</li>
+                    <div className={styles.scheduleItems} key={i}>
+                      <span>{scheduleTime}</span><span className={styles.scheduleTitle}>{item.title}</span>
+                    </div>
                   )
                 })}
-              </ul>
+              </div>
             </TabPanel>
           )
         })}
       </Container>
-    </main>
+    </main >
   );
 }
 

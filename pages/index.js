@@ -8,6 +8,7 @@ const Home = ({ data }) => {
 
   const [open, setOpen] = useState(false);
   const initialData = data;
+  // console.log('check', initialData);
   const [channelData, setChannelData] = useState(initialData);
   const [newData, setNewData] = useState('Sort By Channel Number');
 
@@ -48,9 +49,9 @@ const Home = ({ data }) => {
   };
 
   useEffect(() => {
+    // window.scrollTo(0, 0);
     const results = initialData.filter(obj =>
-      obj.title.toLowerCase().includes(searchTerm)
-    );
+    obj.title.toLowerCase().includes(searchTerm.toLowerCase()));
     setChannelData(results);
   }, [searchTerm]);
 
