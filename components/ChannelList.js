@@ -1,7 +1,8 @@
 import React, { memo } from "react";
 import styles from '../styles/Channel.module.css';
 import { Grid, Typography, Card } from '@material-ui/core';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import moment from 'moment';
 
 const ChannelList = ({ data }) => {
 
@@ -30,12 +31,8 @@ const ChannelList = ({ data }) => {
               <div className={styles.channelDetails}>
                 {
                   obj.currentSchedule.slice(0, 3).map((schedule, i) => {
-
-                    let timeStamp = Date.parse(schedule.datetime);
-                    let dateObject = new Date(timeStamp);
-
-                    const scheduleTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-
+                    let itemDate = moment(schedule.datetime);
+                    const scheduleTime = moment(itemDate, 'ddd DD-MMM-YYYY, hh:mm A').format('hh:mm A');
                     return (
                       <div className={styles.schedule} key={i}>
                         {schedule.title == 'Not Available' ?
