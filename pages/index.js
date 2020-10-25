@@ -50,8 +50,7 @@ const Home = ({ data }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     const results = initialData.filter(obj =>
-      obj.title.toLowerCase().includes(searchTerm)
-    );
+    obj.title.toLowerCase().includes(searchTerm.toLowerCase()));
     setChannelData(results);
   }, [searchTerm]);
 
