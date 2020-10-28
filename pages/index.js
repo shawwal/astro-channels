@@ -2,7 +2,6 @@ import Head from 'next/head';
 import React, { useEffect, useState } from "react";
 import styles from '../styles/Home.module.css';
 import FilterButton from '../components/FilterButton';
-import CloseButton from '../components/CloseButton';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
 import ChannelList from '../components/ChannelList';
 import { makeStyles } from '@material-ui/core/styles';
@@ -59,19 +58,32 @@ const Home = ({ data }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleChange = e => {
-    setSearchTerm(e.target.value);
+  // Handle Search By Channel Name
+  const [searchName, setSearchName] = useState("");
+  const handleSearchName = e => {
+    searchNo != "" ? setSearchNo("") : null;
+    setSearchName(e.target.value);
   };
-
   useEffect(() => {
-    // window.scrollTo(0, 0);
     const results = initialData.filter(obj =>
-      obj.title.toLowerCase().includes(searchTerm.toLowerCase()));
+      obj.title.toLowerCase().includes(searchName.toLowerCase()));
     setChannelData(results);
-  }, [searchTerm]);
+  }, [searchName]);
+  // Handle Search By Channel Name
+
+  // Handle Search By Channel Number
+  const [searchNo, setSearchNo] = useState("");
+  const handleSearchNo = e => {
+    searchName != "" ? setSearchName("") : null;
+    setSearchNo(e.target.value);
+  };
+  useEffect(() => {
+    const results = initialData.filter(obj =>
+      obj.stbNumber.toLowerCase().includes(searchNo.toLowerCase()));
+    setChannelData(results);
+  }, [searchNo]);
+  //  Handle Search By Channel Number
+
 
   const [switchChecked, setSwitch] = useState(themeValue == 'dark' ? true : false);
   const handleSwitch = () => {
@@ -139,48 +151,52 @@ const Home = ({ data }) => {
         </SwipeableDrawer>
 
         <div className={styles.headerRow}>
-          <Typography variant="h5" component="h2">Channels</Typography>
-          <div className={styles.filterRow} onClick={() => handleDrawerOpen()}>
-            <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
-            <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
-            {/* <img
-              src="/filter.svg"
-              alt="Filter Icon"
-              style={{
-                height: '0.9rem',
-                paddingLeft: '0.5rem',
-                cursor: 'pointer'
-              }}
-            /> */}
-          </div>
+          <Typography variant="h5" component="h2">Channels List</Typography>
+          <FormControlLabel
+            label="Dark Mode"
+            style={{ marginRight: 0 }}
+            control={
+              <Switch checked={switchChecked} color="primary" onChange={handleSwitch} />
+            }
+          />
         </div>
-        <div className={styles.headerRow}>
-          <form>
+
+        <Grid container item>
+          <Grid xs={12} sm={4} item>
             <TextField
               type="text"
               variant="outlined"
               label="Search Channel Name"
+              margin="dense"
+              fullWidth
               placeholder="Type here ..."
-              value={searchTerm}
-              onChange={handleChange}
+              value={searchName}
+              onChange={handleSearchName}
             />
-          </form>
-          <FormControlLabel
-            control={
-              <Switch checked={switchChecked} color="primary" onChange={handleSwitch} />
-            }
-            label="Dark Mode"
-          />
-        </div>
-        {/* <div className={styles.modifyDataRow}>
-          <Button onClick={() => handleReset()} variant="outlined">reset</Button>
-          <Button onClick={() => handleSortByName()} variant="outlined">{newData}</Button>
-        </div> */}
+            <TextField
+              type="text"
+              variant="outlined"
+              label="Search Channel Number"
+              margin="dense"
+              fullWidth
+              placeholder="Type here ..."
+              value={searchNo}
+              onChange={handleSearchNo}
+            />
+          </Grid>
+          <Grid xs={12} item container sm={8} style={{ display: 'flex' }} justify="flex-end">
+            <div className={styles.filterRow} onClick={() => handleDrawerOpen()}>
+              <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
+              <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
+            </div>
+          </Grid>
+        </Grid>
+
         <Grid
           container
           spacing={2}
+          style={{ paddingTop: 20 }}
           item
-        // justify="center"
         >
           <ChannelList data={channelData} />
         </Grid>
@@ -190,7 +206,7 @@ const Home = ({ data }) => {
           </p>
         </footer>
       </Container>
-    </main>
+    </main >
   )
 }
 
