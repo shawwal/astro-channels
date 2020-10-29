@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from '../styles/Home.module.css';
 import FilterButton from '../components/FilterButton';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
@@ -25,31 +25,7 @@ const Home = ({ data }) => {
   const [themeValue, setThemeValue] = useRecoilState(themeAtom);
   const [open, setOpen] = useState(false);
   const initialData = data;
-  // console.log('check', initialData);
   const [channelData, setChannelData] = useState(initialData);
-  const [newData, setNewData] = useState('Sort By Channel Number');
-
-  const [searchValue, setSearchValue] = useState('');
-
-  const searchByName = e => {
-    e.preventDefault();
-    // console.log('ok');
-  }
-
-  const handleSortByName = async () => {
-    const sortedData = channelData.sort(function (a, b) {
-      if (a.stbNumber == b.stbNumber) {
-        return a.title - b.title;
-      }
-      return b.stbNumber - a.stbNumber;
-    });
-    setNewData('Sorted');
-  };
-
-  const handleReset = async () => {
-    setNewData('Sort By Channel Number');
-    setChannelData(initialData);
-  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -58,6 +34,57 @@ const Home = ({ data }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  // Handle Sort By Channel Name
+  const [sortNameValue, setSortNameValue] = useState(false);
+  const handleSortByName = useCallback(() => {
+    setSortNumberValue(false);
+    if (sortNameValue == false) {
+      let sorted = [...initialData].sort(function (a, b) {
+        var x = a.title.toLowerCase();
+        var y = b.title.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      });
+      setChannelData(sorted);
+      setSortNameValue(true);
+    } if (sortNameValue == true) {
+      // let newSorted = [...initialData].sort(function (a, b) {
+      //   var x = a.title.toLowerCase();
+      //   var y = b.title.toLowerCase();
+      //   if (x > y) { return -1; }
+      //   if (x < y) { return 1; }
+      //   return 0;
+      // });
+      // setChannelData(newSorted);
+      setChannelData([...initialData]);
+      setSortNameValue(false);
+    }
+  }, [sortNameValue]);
+  // Handle Sort By Channel Name
+
+  // Handle Sort By Channel Number
+  const [sortNumberValue, setSortNumberValue] = useState(false);
+  const handleSortByNumber = useCallback(() => {
+    setSortNameValue(false);
+    if (sortNumberValue == false) {
+      let sorted = [...initialData].sort(function (a, b) {
+        var x = a.stbNumber.toLowerCase();
+        var y = b.stbNumber.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      });
+      setChannelData(sorted);
+      setSortNumberValue(true);
+    } if (sortNumberValue == true) {
+      setChannelData([...initialData]);
+      setSortNumberValue(false)
+    }
+  }, [sortNumberValue]);
+  // Handle Sort By Channel Number
+
   // Handle Search By Channel Name
   const [searchName, setSearchName] = useState("");
   const handleSearchName = e => {
@@ -184,10 +211,14 @@ const Home = ({ data }) => {
               onChange={handleSearchNo}
             />
           </Grid>
-          <Grid xs={12} item container sm={8} style={{ display: 'flex' }} justify="flex-end">
+          <Grid xs={12} item container sm={8} className={styles.topRight}>
             <div className={styles.filterRow} onClick={() => handleDrawerOpen()}>
               <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
               <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
+            </div>
+            <div>
+              <Button onClick={() => handleSortByName()} variant="contained" color={sortNameValue == true ? 'primary' : 'default'}>SORT BY NAME</Button>
+              <Button onClick={() => handleSortByNumber()} variant="contained" color={sortNumberValue == true ? 'primary' : 'default'}>SORT NUMBER</Button>
             </div>
           </Grid>
         </Grid>
