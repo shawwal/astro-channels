@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styles from '../styles/Home.module.css';
 import FilterButton from '../components/FilterButton';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
@@ -15,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     '& > *': {
       margin: theme.spacing(0.5),
+    },
+  },
+  buttons: {
+    '& > *': {
+      marginLeft: theme.spacing(1),
     },
   },
 }));
@@ -37,7 +42,7 @@ const Home = ({ data }) => {
 
   // Handle Sort By Channel Name
   const [sortNameValue, setSortNameValue] = useState(false);
-  const handleSortByName = useCallback(() => {
+  const handleSortByName = () => {
     setSortNumberValue(false);
     if (sortNameValue == false) {
       let sorted = [...initialData].sort(function (a, b) {
@@ -61,12 +66,12 @@ const Home = ({ data }) => {
       setChannelData([...initialData]);
       setSortNameValue(false);
     }
-  }, [sortNameValue]);
+  };
   // Handle Sort By Channel Name
 
   // Handle Sort By Channel Number
   const [sortNumberValue, setSortNumberValue] = useState(false);
-  const handleSortByNumber = useCallback(() => {
+  const handleSortByNumber = () => {
     setSortNameValue(false);
     if (sortNumberValue == false) {
       let sorted = [...initialData].sort(function (a, b) {
@@ -82,7 +87,7 @@ const Home = ({ data }) => {
       setChannelData([...initialData]);
       setSortNumberValue(false)
     }
-  }, [sortNumberValue]);
+  };
   // Handle Sort By Channel Number
 
   // Handle Search By Channel Name
@@ -216,21 +221,13 @@ const Home = ({ data }) => {
               <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
               <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
             </div>
-            <div>
-              <Button onClick={() => handleSortByName()} variant="contained" color={sortNameValue == true ? 'primary' : 'default'}>SORT BY NAME</Button>
+            <div className={classes.buttons}>
+              <Button mr={2} onClick={() => handleSortByName()} variant="contained" color={sortNameValue == true ? 'primary' : 'default'}>SORT BY NAME</Button>
               <Button onClick={() => handleSortByNumber()} variant="contained" color={sortNumberValue == true ? 'primary' : 'default'}>SORT NUMBER</Button>
             </div>
           </Grid>
         </Grid>
-
-        <Grid
-          container
-          spacing={2}
-          style={{ paddingTop: 20 }}
-          item
-        >
-          <ChannelList data={channelData} />
-        </Grid>
+        <ChannelList data={channelData} />
         <footer className={styles.footer}>
           <p>
             Created by&nbsp;<a href="https://shawwals.vercel.app/" target="_blank" rel="noreferrer">شَوَّال‎</a>&nbsp;©2020
