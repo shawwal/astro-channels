@@ -14,3 +14,8 @@ export const languageAtom = atom({
   key: "language",
   default: []
 })
+
+export const resolutionAtom = atom({
+  key: "resolution",
+  default: []
+})

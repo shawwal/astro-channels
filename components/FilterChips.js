@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import { categoryAtom, languageAtom } from '../src/atoms';
+import { categoryAtom, languageAtom, resolutionAtom } from '../src/atoms';
 
 const useStyles = makeStyles((theme) => ({
   chips: {
@@ -22,6 +22,7 @@ const FilterChips = () => {
   // Recoil State
   const [categoryList, setCategoryList] = useRecoilState(categoryAtom);
   const [languageList, setLanguageList] = useRecoilState(languageAtom);
+  const [resList, setResList] = useRecoilState(resolutionAtom);
 
   // Recoil
   // Category Start
@@ -109,6 +110,42 @@ const FilterChips = () => {
 
   // Language End
 
+  // Resolution Start
+
+  const resultionArray = [
+    { id: 1, value: "SD", isChecked: false },
+    { id: 2, value: "HD", isChecked: false },
+  ];
+  const [resolutionItems, setResItems] = useState(resultionArray);
+  const [selectedResolution, setSelectedResoltuion] = useState([]);
+  const addResolutionItems = (data) => {
+    const newList = resolutionItems.map((item) => {
+      if (item.id === data.id) {
+        const updatedItem = {
+          ...item,
+          isChecked: !item.isChecked,
+        };
+
+        return updatedItem;
+      }
+      return item;
+    });
+    setResItems(newList);
+    const found = selectedResolution.some(obj => obj.id === data.id);
+    if (!found) {
+      setSelectedResoltuion([...selectedResolution, { id: data.id, category: data.value }]);
+    } else {
+      const filteredItems = selectedResolution.filter(item => item.id !== data.id);
+      setSelectedResoltuion(filteredItems);
+    }
+  }
+  useEffect(() => {
+    const resString = JSON.stringify(selectedResolution.map(obj => obj.category));
+    setResList(resString);
+  }, [selectedResolution]);
+
+  // Resolution End
+
   return (
     <div>
       <Typography>Categories</Typography>
@@ -135,6 +172,19 @@ const FilterChips = () => {
           )
         })}
       </div>
+      <Typography>Resolution</Typography>
+      <div className={classes.chips}>
+        {resolutionItems.map((obj, index) => {
+          return (
+            <Chip
+              key={index}
+              label={obj.value}
+              color={obj.isChecked == true ? "primary" : "default"}
+              onClick={() => addResolutionItems(obj)} />
+          )
+        })}
+      </div>
+
     </div>
 
   )
