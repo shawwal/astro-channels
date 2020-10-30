@@ -123,26 +123,27 @@ const Home = ({ data }) => {
     setThemeValue(themeValue == 'dark' ? 'light' : 'dark');
   }
 
-
-  const filter = {
-    category: 'Sports',
+  let filterItem = {
+    category: 'Movies',
     language: 'International',
     isHd: true
   };
 
   const handleFilter = () => {
     const filterObj = initialData.filter(function (item) {
-      for (var key in filter) {
-        if (item[key] === undefined || item[key] != filter[key])
+      for (var key in filterItem) {
+        if (item[key] === undefined || item[key] != filterItem[key])
           return false;
       }
       return true;
     });
     setChannelData(filterObj);
+    handleDrawerClose();
   }
 
   const handleReset = () => {
     setChannelData([...initialData]);
+    handleDrawerClose();
   }
   return (
     <main className={styles.main}>
@@ -169,6 +170,7 @@ const Home = ({ data }) => {
                 />
               </div>
               <Typography>Categories</Typography>
+
               <div className={classes.chips}>
                 <Chip label="Movies" color="primary" />
                 <Chip label="Sport" />
@@ -198,7 +200,7 @@ const Home = ({ data }) => {
             </div>
             <div>
               <Button variant="outlined" onClick={() => handleReset()}>RESET</Button>
-              <Button variant="contained" onClick={() => handleFilter()} color="primary">APPLY</Button>
+              <Button variant="contained" className={classes.buttons} onClick={() => handleFilter()} color="primary">APPLY</Button>
             </div>
           </div>
         </SwipeableDrawer>
