@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import { filterAtom } from '../src/atoms';
+import { categoryAtom, languageAtom } from '../src/atoms';
 
 const useStyles = makeStyles((theme) => ({
   chips: {
@@ -19,7 +19,12 @@ const FilterChips = () => {
 
   const classes = useStyles();
 
-  const [categoryList, setCategoryList] = useRecoilState(filterAtom);
+  // Recoil State
+  const [categoryList, setCategoryList] = useRecoilState(categoryAtom);
+  const [languageList, setLanguageList] = useRecoilState(languageAtom);
+
+  // Recoil
+  // Category Start
 
   const categoryArray = [
     { id: 1, value: "Movies", isChecked: false },
@@ -57,11 +62,52 @@ const FilterChips = () => {
       setItems(filteredItems);
     }
   }
-
   useEffect(() => {
     const categoryString = JSON.stringify(items.map(obj => obj.category));
     setCategoryList(categoryString);
   }, [items]);
+
+  // Category End
+
+  // Language Start
+
+  const languageArray = [
+    { id: 1, value: "International", isChecked: false },
+    { id: 2, value: "Malay", isChecked: false },
+    { id: 3, value: "Chinese", isChecked: false },
+    { id: 4, value: "Indian", isChecked: false },
+    { id: 5, value: "Korean & Japanese", isChecked: false },
+    { id: 6, value: "Multiple Languages", isChecked: false },
+  ];
+  const [languageItems, setArrayItems] = useState(languageArray);
+  const [selectedLanguage, setLanguageItems] = useState([]);
+  const addLanguageItems = (data) => {
+    const newList = languageItems.map((item) => {
+      if (item.id === data.id) {
+        const updatedItem = {
+          ...item,
+          isChecked: !item.isChecked,
+        };
+
+        return updatedItem;
+      }
+      return item;
+    });
+    setArrayItems(newList);
+    const found = selectedLanguage.some(obj => obj.id === data.id);
+    if (!found) {
+      setLanguageItems([...selectedLanguage, { id: data.id, category: data.value }]);
+    } else {
+      const filteredItems = selectedLanguage.filter(item => item.id !== data.id);
+      setLanguageItems(filteredItems);
+    }
+  }
+  useEffect(() => {
+    const languageString = JSON.stringify(selectedLanguage.map(obj => obj.category));
+    setLanguageList(languageString);
+  }, [selectedLanguage]);
+
+  // Language End
 
   return (
     <div>
@@ -74,6 +120,18 @@ const FilterChips = () => {
               label={obj.value}
               color={obj.isChecked == true ? "primary" : "default"}
               onClick={() => addItems(obj)} />
+          )
+        })}
+      </div>
+      <Typography>Languages</Typography>
+      <div className={classes.chips}>
+        {languageItems.map((obj, index) => {
+          return (
+            <Chip
+              key={index}
+              label={obj.value}
+              color={obj.isChecked == true ? "primary" : "default"}
+              onClick={() => addLanguageItems(obj)} />
           )
         })}
       </div>
