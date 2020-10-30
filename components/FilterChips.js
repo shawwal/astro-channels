@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Chip } from '@material-ui/core';
+import React, { useEffect, useState } from "react";
+import { Chip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilState } from 'recoil';
+import { filterAtom } from '../src/atoms';
 
 const useStyles = makeStyles((theme) => ({
   chips: {
@@ -16,8 +18,10 @@ const useStyles = makeStyles((theme) => ({
 const FilterChips = () => {
 
   const classes = useStyles();
-  
-  const checkboxes = [
+
+  const [categoryList, setCategoryList] = useRecoilState(filterAtom);
+
+  const categoryArray = [
     { id: 1, value: "Movies", isChecked: false },
     { id: 2, value: "Sport", isChecked: false },
     { id: 3, value: "Kids", isChecked: false },
@@ -27,13 +31,13 @@ const FilterChips = () => {
     { id: 7, value: "Lifestyle", isChecked: false },
     { id: 8, value: "Variety Entertainment", isChecked: false },
     { id: 9, value: "Special Interest", isChecked: false },
-    { id: 6, value: "Radio", isChecked: false },
-    
+    { id: 10, value: "Radio", isChecked: false },
   ];
-  const [checkItems, setCheckItems] = useState(checkboxes);
+
+  const [categoryItems, setCategoryItems] = useState(categoryArray);
   const [items, setItems] = useState([]);
   const addItems = (data) => {
-    const newList = checkItems.map((item) => {
+    const newList = categoryItems.map((item) => {
       if (item.id === data.id) {
         const updatedItem = {
           ...item,
@@ -44,33 +48,35 @@ const FilterChips = () => {
       }
       return item;
     });
-    setCheckItems(newList);
+    setCategoryItems(newList);
     const found = items.some(obj => obj.id === data.id);
     if (!found) {
-      setItems([...items, data]);
+      setItems([...items, { id: data.id, category: data.value }]);
     } else {
       const filteredItems = items.filter(item => item.id !== data.id);
       setItems(filteredItems);
     }
   }
+
+  useEffect(() => {
+    const categoryString = JSON.stringify(items.map(obj => obj.category));
+    setCategoryList(categoryString);
+  }, [items]);
+
   return (
-    <div className={classes.chips}>
-      {checkItems.map((obj, index) => {
-        return (
-          <Chip
-            key={index}
-            label={obj.value}
-            color={obj.isChecked == true ? "primary" : "default"}
-            onClick={() => addItems(obj)} />
-        )
-      })}
-      {items.map((obj, index) => {
-        return (
-          <div key={index}>
-            <p>{obj.value}</p>
-          </div>
-        )
-      })}
+    <div>
+      <Typography>Categories</Typography>
+      <div className={classes.chips}>
+        {categoryItems.map((obj, index) => {
+          return (
+            <Chip
+              key={index}
+              label={obj.value}
+              color={obj.isChecked == true ? "primary" : "default"}
+              onClick={() => addItems(obj)} />
+          )
+        })}
+      </div>
     </div>
 
   )
