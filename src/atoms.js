@@ -5,7 +5,12 @@ export const themeAtom = atom({
   default: "dark"
 });
 
-export const filterAtom = atom({
-  key: "filter",
+export const categoryAtom = atom({
+  key: "category",
   default: []
 });
+
+export const languageAtom = atom({
+  key: "language",
+  default: []
+})

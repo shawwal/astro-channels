@@ -6,7 +6,7 @@ import FilterChips from '../components/FilterChips';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
 import ChannelList from '../components/ChannelList';
 import { makeStyles } from '@material-ui/core/styles';
-import { themeAtom, filterAtom } from '../src/atoms';
+import { themeAtom, categoryAtom, languageAtom } from '../src/atoms';
 import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,12 +31,13 @@ const Home = ({ data }) => {
   const [themeValue, setThemeValue] = useRecoilState(themeAtom);
   const [open, setOpen] = useState(false);
   const initialData = data;
-  // console.log('initial data', initialData);
   const [channelData, setChannelData] = useState(initialData);
-  const [categoryList, setCategoryList] = useRecoilState(filterAtom);
+  const [categoryList, setCategoryList] = useRecoilState(categoryAtom);
+  const [languageList, setLanguageList] = useRecoilState(languageAtom);
 
   const handleDrawerOpen = () => {
     setCategoryList([]);
+    setLanguageList([]);
     setOpen(true);
   };
 
@@ -128,8 +129,14 @@ const Home = ({ data }) => {
   }
 
   const handleFilter = () => {
-    var result = initialData.filter(function(e) {
-      return categoryList.includes(e.category)
+    var result = initialData.filter(function (e) {
+      if (categoryList.length > 2 && languageList.length == 2) {
+        return categoryList.includes(e.category)
+      } else if (languageList.length > 2  && categoryList.length == 2  ) {
+        return languageList.includes(e.language)
+      } else if (languageList.length > 2 && categoryList.length > 2) {
+        return languageList.includes(e.language) && categoryList.includes(e.category)
+      }
     });
     setChannelData(result);
     handleDrawerClose();
@@ -139,7 +146,7 @@ const Home = ({ data }) => {
     setChannelData([...initialData]);
     handleDrawerClose();
   }
-
+  // console.log('channel data', channelData);
   return (
     <main className={styles.main}>
       <Container maxWidth="lg">
@@ -165,15 +172,6 @@ const Home = ({ data }) => {
                 />
               </div>
               <FilterChips />
-              <Typography>Languages</Typography>
-              <div className={classes.chips}>
-                <Chip label="International" />
-                <Chip label="Malay" />
-                <Chip label="Chinese" />
-                <Chip label="Indian" />
-                <Chip label="Korean & Japanese" />
-                <Chip label="Multiple Languages" />
-              </div>
               <Typography>Resolution</Typography>
               <div className={classes.chips}>
                 <Chip label="SD" />
