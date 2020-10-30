@@ -23,7 +23,7 @@ const FilterChips = () => {
 
   const categoryArray = [
     { id: 1, value: "Movies", isChecked: false },
-    { id: 2, value: "Sport", isChecked: false },
+    { id: 2, value: "Sports", isChecked: false },
     { id: 3, value: "Kids", isChecked: false },
     { id: 4, value: "Learning", isChecked: false },
     { id: 5, value: "Music", isChecked: false },
