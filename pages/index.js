@@ -2,10 +2,11 @@ import Head from 'next/head';
 import React, { useEffect, useState } from "react";
 import styles from '../styles/Home.module.css';
 import FilterButton from '../components/FilterButton';
+import FilterChips from '../components/FilterChips';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
 import ChannelList from '../components/ChannelList';
 import { makeStyles } from '@material-ui/core/styles';
-import { themeAtom } from '../src/atoms';
+import { themeAtom, filterAtom } from '../src/atoms';
 import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,8 +32,10 @@ const Home = ({ data }) => {
   const [open, setOpen] = useState(false);
   const initialData = data;
   const [channelData, setChannelData] = useState(initialData);
+  const [categoryList, setCategoryList] = useRecoilState(filterAtom);
 
   const handleDrawerOpen = () => {
+    setCategoryList([]);
     setOpen(true);
   };
 
@@ -123,21 +126,11 @@ const Home = ({ data }) => {
     setThemeValue(themeValue == 'dark' ? 'light' : 'dark');
   }
 
-  let filterItem = {
-    category: 'Movies',
-    language: 'International',
-    isHd: true
-  };
-
   const handleFilter = () => {
-    const filterObj = initialData.filter(function (item) {
-      for (var key in filterItem) {
-        if (item[key] === undefined || item[key] != filterItem[key])
-          return false;
-      }
-      return true;
+    var result = initialData.filter(function(e) {
+      return categoryList.includes(e.category) && e.isHd == true
     });
-    setChannelData(filterObj);
+    setChannelData(result);
     handleDrawerClose();
   }
 
@@ -145,6 +138,7 @@ const Home = ({ data }) => {
     setChannelData([...initialData]);
     handleDrawerClose();
   }
+
   return (
     <main className={styles.main}>
       <Container maxWidth="lg">
@@ -169,23 +163,10 @@ const Home = ({ data }) => {
                   className={styles.closeIcon}
                 />
               </div>
-              <Typography>Categories</Typography>
-
-              <div className={classes.chips}>
-                <Chip label="Movies" color="primary" />
-                <Chip label="Sport" />
-                <Chip label="Kids" />
-                <Chip label="Learning" />
-                <Chip label="Music" />
-                <Chip label="News" />
-                <Chip label="Lifestyle" />
-                <Chip label="Variety Entertainment" />
-                <Chip label="Special Interest" />
-                <Chip label="Radio" />
-              </div>
+              <FilterChips />
               <Typography>Languages</Typography>
               <div className={classes.chips}>
-                <Chip color="primary" label="International" />
+                <Chip label="International" />
                 <Chip label="Malay" />
                 <Chip label="Chinese" />
                 <Chip label="Indian" />
