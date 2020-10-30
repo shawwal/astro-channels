@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import { Container, Tabs, Tab } from '@material-ui/core';
+import { Container, Tabs, Tab, Backdrop, CircularProgress } from '@material-ui/core';
 import TabPanel from '../components/TabPannel';
 import styles from '../styles/Details.module.css';
 import moment from 'moment';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   tabWidth: {
     minWidth: 50
-  }
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 const ChannelDetails = ({ data }) => {
@@ -19,12 +23,18 @@ const ChannelDetails = ({ data }) => {
   const router = useRouter()
   const scheduleDate = Object.keys(data.schedule);
   const scheduleList = Object.values(data.schedule);
+  const [loading, setLoading] = useState(false);
 
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleGoBack = () => {
+    setLoading(true);
+    router.push('/')
+  }
 
   return (
     <main>
@@ -37,9 +47,13 @@ const ChannelDetails = ({ data }) => {
       </Head>
 
       <Container maxWidth="md">
+        {loading == true ?
+          <Backdrop className={classes.backdrop} open={loading}>
+            <CircularProgress color="inherit" />
+          </Backdrop> : <div />}
         <div
           className={styles.backButton}
-          onClick={() => router.push('/')}
+          onClick={() => handleGoBack()}
         >
           ⇦ Go Back
         </div>

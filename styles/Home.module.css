@@ -25,6 +25,13 @@
   cursor: pointer;
 }
 
+.topRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
 .drawerStyle {
   padding: 1rem;
   width: 300px;

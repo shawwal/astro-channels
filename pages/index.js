@@ -2,7 +2,6 @@ import Head from 'next/head';
 import React, { useEffect, useState } from "react";
 import styles from '../styles/Home.module.css';
 import FilterButton from '../components/FilterButton';
-import CloseButton from '../components/CloseButton';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
 import ChannelList from '../components/ChannelList';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0.5),
     },
   },
+  buttons: {
+    '& > *': {
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));
 
 const Home = ({ data }) => {
@@ -26,31 +30,7 @@ const Home = ({ data }) => {
   const [themeValue, setThemeValue] = useRecoilState(themeAtom);
   const [open, setOpen] = useState(false);
   const initialData = data;
-  // console.log('check', initialData);
   const [channelData, setChannelData] = useState(initialData);
-  const [newData, setNewData] = useState('Sort By Channel Number');
-
-  const [searchValue, setSearchValue] = useState('');
-
-  const searchByName = e => {
-    e.preventDefault();
-    // console.log('ok');
-  }
-
-  const handleSortByName = async () => {
-    const sortedData = channelData.sort(function (a, b) {
-      if (a.stbNumber == b.stbNumber) {
-        return a.title - b.title;
-      }
-      return b.stbNumber - a.stbNumber;
-    });
-    setNewData('Sorted');
-  };
-
-  const handleReset = async () => {
-    setNewData('Sort By Channel Number');
-    setChannelData(initialData);
-  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -60,18 +40,82 @@ const Home = ({ data }) => {
     setOpen(false);
   };
 
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleChange = e => {
-    setSearchTerm(e.target.value);
+  // Handle Sort By Channel Name
+  const [sortNameValue, setSortNameValue] = useState(false);
+  const handleSortByName = () => {
+    setSortNumberValue(false);
+    if (sortNameValue == false) {
+      let sorted = [...initialData].sort(function (a, b) {
+        var x = a.title.toLowerCase();
+        var y = b.title.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      });
+      setChannelData(sorted);
+      setSortNameValue(true);
+    } if (sortNameValue == true) {
+      // let newSorted = [...initialData].sort(function (a, b) {
+      //   var x = a.title.toLowerCase();
+      //   var y = b.title.toLowerCase();
+      //   if (x > y) { return -1; }
+      //   if (x < y) { return 1; }
+      //   return 0;
+      // });
+      // setChannelData(newSorted);
+      setChannelData([...initialData]);
+      setSortNameValue(false);
+    }
   };
+  // Handle Sort By Channel Name
 
+  // Handle Sort By Channel Number
+  const [sortNumberValue, setSortNumberValue] = useState(false);
+  const handleSortByNumber = () => {
+    setSortNameValue(false);
+    if (sortNumberValue == false) {
+      let sorted = [...initialData].sort(function (a, b) {
+        var x = a.stbNumber.toLowerCase();
+        var y = b.stbNumber.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      });
+      setChannelData(sorted);
+      setSortNumberValue(true);
+    } if (sortNumberValue == true) {
+      setChannelData([...initialData]);
+      setSortNumberValue(false)
+    }
+  };
+  // Handle Sort By Channel Number
+
+  // Handle Search By Channel Name
+  const [searchName, setSearchName] = useState("");
+  const handleSearchName = e => {
+    searchNo != "" ? setSearchNo("") : null;
+    setSearchName(e.target.value);
+  };
   useEffect(() => {
-    // window.scrollTo(0, 0);
     const results = initialData.filter(obj =>
-      obj.title.toLowerCase().includes(searchTerm.toLowerCase()));
+      obj.title.toLowerCase().includes(searchName.toLowerCase()));
     setChannelData(results);
-  }, [searchTerm]);
+  }, [searchName]);
+  // Handle Search By Channel Name
+
+  // Handle Search By Channel Number
+  const [searchNo, setSearchNo] = useState("");
+  const handleSearchNo = e => {
+    searchName != "" ? setSearchName("") : null;
+    setSearchNo(e.target.value);
+  };
+  useEffect(() => {
+    const results = initialData.filter(obj =>
+      obj.stbNumber.toLowerCase().includes(searchNo.toLowerCase()));
+    setChannelData(results);
+  }, [searchNo]);
+  //  Handle Search By Channel Number
+
 
   const [switchChecked, setSwitch] = useState(themeValue == 'dark' ? true : false);
   const handleSwitch = () => {
@@ -79,7 +123,27 @@ const Home = ({ data }) => {
     setThemeValue(themeValue == 'dark' ? 'light' : 'dark');
   }
 
-  // console.log('test', data);
+
+  const filter = {
+    category: 'Sports',
+    language: 'International',
+    isHd: true
+  };
+
+  const handleFilter = () => {
+    const filterObj = initialData.filter(function (item) {
+      for (var key in filter) {
+        if (item[key] === undefined || item[key] != filter[key])
+          return false;
+      }
+      return true;
+    });
+    setChannelData(filterObj);
+  }
+
+  const handleReset = () => {
+    setChannelData([...initialData]);
+  }
   return (
     <main className={styles.main}>
       <Container maxWidth="lg">
@@ -106,7 +170,7 @@ const Home = ({ data }) => {
               </div>
               <Typography>Categories</Typography>
               <div className={classes.chips}>
-                <Chip label="Movies" />
+                <Chip label="Movies" color="primary" />
                 <Chip label="Sport" />
                 <Chip label="Kids" />
                 <Chip label="Learning" />
@@ -119,7 +183,7 @@ const Home = ({ data }) => {
               </div>
               <Typography>Languages</Typography>
               <div className={classes.chips}>
-                <Chip label="International" />
+                <Chip color="primary" label="International" />
                 <Chip label="Malay" />
                 <Chip label="Chinese" />
                 <Chip label="Indian" />
@@ -129,68 +193,69 @@ const Home = ({ data }) => {
               <Typography>Resolution</Typography>
               <div className={classes.chips}>
                 <Chip label="SD" />
-                <Chip label="HD" />
+                <Chip color="primary" label="HD" />
               </div>
             </div>
             <div>
-              <Button variant="outlined">RESET</Button> <Button variant="contained" color="primary">APPLY</Button>
+              <Button variant="outlined" onClick={() => handleReset()}>RESET</Button>
+              <Button variant="contained" onClick={() => handleFilter()} color="primary">APPLY</Button>
             </div>
           </div>
         </SwipeableDrawer>
 
         <div className={styles.headerRow}>
-          <Typography variant="h5" component="h2">Channels</Typography>
-          <div className={styles.filterRow} onClick={() => handleDrawerOpen()}>
-            <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
-            <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
-            {/* <img
-              src="/filter.svg"
-              alt="Filter Icon"
-              style={{
-                height: '0.9rem',
-                paddingLeft: '0.5rem',
-                cursor: 'pointer'
-              }}
-            /> */}
-          </div>
+          <Typography variant="h5" component="h2">Channels List</Typography>
+          <FormControlLabel
+            label="Dark Mode"
+            style={{ marginRight: 0 }}
+            control={
+              <Switch checked={switchChecked} color="primary" onChange={handleSwitch} />
+            }
+          />
         </div>
-        <div className={styles.headerRow}>
-          <form>
+
+        <Grid container item>
+          <Grid xs={12} sm={4} item>
             <TextField
               type="text"
               variant="outlined"
               label="Search Channel Name"
+              margin="dense"
+              fullWidth
               placeholder="Type here ..."
-              value={searchTerm}
-              onChange={handleChange}
+              value={searchName}
+              onChange={handleSearchName}
             />
-          </form>
-          <FormControlLabel
-            control={
-              <Switch checked={switchChecked} color="primary" onChange={handleSwitch} />
-            }
-            label="Dark Mode"
-          />
-        </div>
-        {/* <div className={styles.modifyDataRow}>
-          <Button onClick={() => handleReset()} variant="outlined">reset</Button>
-          <Button onClick={() => handleSortByName()} variant="outlined">{newData}</Button>
-        </div> */}
-        <Grid
-          container
-          spacing={2}
-          item
-        // justify="center"
-        >
-          <ChannelList data={channelData} />
+            <TextField
+              type="text"
+              variant="outlined"
+              label="Search Channel Number"
+              margin="dense"
+              fullWidth
+              placeholder="Type here ..."
+              value={searchNo}
+              onChange={handleSearchNo}
+            />
+          </Grid>
+          <Grid xs={12} item container sm={8} className={styles.topRight}>
+            <div className={styles.filterRow} onClick={() => handleDrawerOpen()}>
+              <Typography variant="subtitle1" className={styles.filterText}>Filter</Typography>
+              <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
+            </div>
+            <div className={classes.buttons}>
+              <Button mr={2} onClick={() => handleSortByName()} variant="contained" color={sortNameValue == true ? 'primary' : 'default'}>SORT NAME</Button>
+              <Button onClick={() => handleSortByNumber()} variant="contained" color={sortNumberValue == true ? 'primary' : 'default'}>SORT NUMBER</Button>
+            </div>
+          </Grid>
         </Grid>
+        <ChannelList data={channelData} />
         <footer className={styles.footer}>
           <p>
             Created by&nbsp;<a href="https://shawwals.vercel.app/" target="_blank" rel="noreferrer">شَوَّال‎</a>&nbsp;©2020
           </p>
         </footer>
       </Container>
-    </main>
+    </main >
   )
 }
 

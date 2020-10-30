@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
 export const themeAtom = atom({
-  key: "themeData",
+  key: "theme",
   default: "dark"
 });
