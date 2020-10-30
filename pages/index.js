@@ -31,6 +31,7 @@ const Home = ({ data }) => {
   const [themeValue, setThemeValue] = useRecoilState(themeAtom);
   const [open, setOpen] = useState(false);
   const initialData = data;
+  // console.log('initial data', initialData);
   const [channelData, setChannelData] = useState(initialData);
   const [categoryList, setCategoryList] = useRecoilState(filterAtom);
 
@@ -128,7 +129,7 @@ const Home = ({ data }) => {
 
   const handleFilter = () => {
     var result = initialData.filter(function(e) {
-      return categoryList.includes(e.category) && e.isHd == true
+      return categoryList.includes(e.category)
     });
     setChannelData(result);
     handleDrawerClose();
@@ -176,7 +177,7 @@ const Home = ({ data }) => {
               <Typography>Resolution</Typography>
               <div className={classes.chips}>
                 <Chip label="SD" />
-                <Chip color="primary" label="HD" />
+                <Chip label="HD" />
               </div>
             </div>
             <div>
