@@ -6,7 +6,7 @@ import FilterChips from '../components/FilterChips';
 import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography, TextField, Chip, Switch } from '@material-ui/core';
 import ChannelList from '../components/ChannelList';
 import { makeStyles } from '@material-ui/core/styles';
-import { themeAtom, categoryAtom, languageAtom } from '../src/atoms';
+import { themeAtom, categoryAtom, languageAtom, resolutionAtom } from '../src/atoms';
 import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,10 +34,12 @@ const Home = ({ data }) => {
   const [channelData, setChannelData] = useState(initialData);
   const [categoryList, setCategoryList] = useRecoilState(categoryAtom);
   const [languageList, setLanguageList] = useRecoilState(languageAtom);
+  const [resList, setResList] = useRecoilState(resolutionAtom);
 
   const handleDrawerOpen = () => {
     setCategoryList([]);
     setLanguageList([]);
+    setResList([]);
     setOpen(true);
   };
 
@@ -132,13 +134,30 @@ const Home = ({ data }) => {
     var result = initialData.filter(function (e) {
       if (categoryList.length > 2 && languageList.length == 2) {
         return categoryList.includes(e.category)
-      } else if (languageList.length > 2  && categoryList.length == 2  ) {
+      } else if (languageList.length > 2 && categoryList.length == 2) {
         return languageList.includes(e.language)
       } else if (languageList.length > 2 && categoryList.length > 2) {
         return languageList.includes(e.language) && categoryList.includes(e.category)
+      } else {
+        return initialData;
       }
     });
-    setChannelData(result);
+
+    var filterResult = result.filter(function (e) {
+      if (resList == '["HD"]') {
+        return e.isHd == true 
+      } else if (resList == '["SD"]') {
+        return e.isHd == false 
+      } else {
+        return result;
+      }
+    });
+
+    if (resList.length > 2) {
+      setChannelData(filterResult)
+    } else {
+      setChannelData(result)
+    }
     handleDrawerClose();
   }
 
@@ -172,11 +191,6 @@ const Home = ({ data }) => {
                 />
               </div>
               <FilterChips />
-              <Typography>Resolution</Typography>
-              <div className={classes.chips}>
-                <Chip label="SD" />
-                <Chip label="HD" />
-              </div>
             </div>
             <div>
               <Button variant="outlined" onClick={() => handleReset()}>RESET</Button>
