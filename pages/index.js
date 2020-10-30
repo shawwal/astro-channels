@@ -123,7 +123,27 @@ const Home = ({ data }) => {
     setThemeValue(themeValue == 'dark' ? 'light' : 'dark');
   }
 
-  // console.log('test', data);
+
+  const filter = {
+    category: 'Sports',
+    language: 'International',
+    isHd: true
+  };
+
+  const handleFilter = () => {
+    const filterObj = initialData.filter(function (item) {
+      for (var key in filter) {
+        if (item[key] === undefined || item[key] != filter[key])
+          return false;
+      }
+      return true;
+    });
+    setChannelData(filterObj);
+  }
+
+  const handleReset = () => {
+    setChannelData([...initialData]);
+  }
   return (
     <main className={styles.main}>
       <Container maxWidth="lg">
@@ -150,7 +170,7 @@ const Home = ({ data }) => {
               </div>
               <Typography>Categories</Typography>
               <div className={classes.chips}>
-                <Chip label="Movies" />
+                <Chip label="Movies" color="primary" />
                 <Chip label="Sport" />
                 <Chip label="Kids" />
                 <Chip label="Learning" />
@@ -163,7 +183,7 @@ const Home = ({ data }) => {
               </div>
               <Typography>Languages</Typography>
               <div className={classes.chips}>
-                <Chip label="International" />
+                <Chip color="primary" label="International" />
                 <Chip label="Malay" />
                 <Chip label="Chinese" />
                 <Chip label="Indian" />
@@ -173,11 +193,12 @@ const Home = ({ data }) => {
               <Typography>Resolution</Typography>
               <div className={classes.chips}>
                 <Chip label="SD" />
-                <Chip label="HD" />
+                <Chip color="primary" label="HD" />
               </div>
             </div>
             <div>
-              <Button variant="outlined">RESET</Button> <Button variant="contained" color="primary">APPLY</Button>
+              <Button variant="outlined" onClick={() => handleReset()}>RESET</Button>
+              <Button variant="contained" onClick={() => handleFilter()} color="primary">APPLY</Button>
             </div>
           </div>
         </SwipeableDrawer>
@@ -222,7 +243,7 @@ const Home = ({ data }) => {
               <FilterButton color={themeValue == 'light' ? '#333' : '#FFF'} />
             </div>
             <div className={classes.buttons}>
-              <Button mr={2} onClick={() => handleSortByName()} variant="contained" color={sortNameValue == true ? 'primary' : 'default'}>SORT BY NAME</Button>
+              <Button mr={2} onClick={() => handleSortByName()} variant="contained" color={sortNameValue == true ? 'primary' : 'default'}>SORT NAME</Button>
               <Button onClick={() => handleSortByNumber()} variant="contained" color={sortNumberValue == true ? 'primary' : 'default'}>SORT NUMBER</Button>
             </div>
           </Grid>
