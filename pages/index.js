@@ -7,7 +7,7 @@ import { Button, Container, FormControlLabel, Grid, SwipeableDrawer, Typography,
 import ChannelList from '../components/ChannelList';
 import { makeStyles } from '@material-ui/core/styles';
 import { themeAtom, categoryAtom, languageAtom, resolutionAtom } from '../src/atoms';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const useStyles = makeStyles((theme) => ({
   chips: {
@@ -32,14 +32,11 @@ const Home = ({ data }) => {
   const [open, setOpen] = useState(false);
   const initialData = data;
   const [channelData, setChannelData] = useState(initialData);
-  const [categoryList, setCategoryList] = useRecoilState(categoryAtom);
-  const [languageList, setLanguageList] = useRecoilState(languageAtom);
-  const [resList, setResList] = useRecoilState(resolutionAtom);
+  const categoryList = useRecoilValue(categoryAtom);
+  const languageList = useRecoilValue(languageAtom);
+  const resList = useRecoilValue(resolutionAtom);
 
   const handleDrawerOpen = () => {
-    setCategoryList([]);
-    setLanguageList([]);
-    setResList([]);
     setOpen(true);
   };
 
@@ -165,7 +162,9 @@ const Home = ({ data }) => {
     setChannelData([...initialData]);
     handleDrawerClose();
   }
+  
   // console.log('channel data', channelData);
+
   return (
     <main className={styles.main}>
       <Container maxWidth="lg">
