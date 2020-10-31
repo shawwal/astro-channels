@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Chip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import { categoryAtom, languageAtom, resolutionAtom } from '../src/atoms';
+import {
+  categoryAtom, selectedCategory, categoryArray,
+  languageAtom, selectedLanguage, languageArray,
+  resolutionAtom, selectedResolution, resultionsArrayList
+} from '../src/atoms';
 
 const useStyles = makeStyles((theme) => ({
   chips: {
@@ -27,21 +31,9 @@ const FilterChips = () => {
   // Recoil
   // Category Start
 
-  const categoryArray = [
-    { id: 1, value: "Movies", isChecked: false },
-    { id: 2, value: "Sports", isChecked: false },
-    { id: 3, value: "Kids", isChecked: false },
-    { id: 4, value: "Learning", isChecked: false },
-    { id: 5, value: "Music", isChecked: false },
-    { id: 6, value: "News", isChecked: false },
-    { id: 7, value: "Lifestyle", isChecked: false },
-    { id: 8, value: "Variety Entertainment", isChecked: false },
-    { id: 9, value: "Special Interest", isChecked: false },
-    { id: 10, value: "Radio", isChecked: false },
-  ];
+  const [categoryItems, setCategoryItems] = useRecoilState(categoryArray);
+  const [items, setItems] = useRecoilState(selectedCategory);
 
-  const [categoryItems, setCategoryItems] = useState(categoryArray);
-  const [items, setItems] = useState([]);
   const addItems = (data) => {
     const newList = categoryItems.map((item) => {
       if (item.id === data.id) {
@@ -72,16 +64,9 @@ const FilterChips = () => {
 
   // Language Start
 
-  const languageArray = [
-    { id: 1, value: "International", isChecked: false },
-    { id: 2, value: "Malay", isChecked: false },
-    { id: 3, value: "Chinese", isChecked: false },
-    { id: 4, value: "Indian", isChecked: false },
-    { id: 5, value: "Korean & Japanese", isChecked: false },
-    { id: 6, value: "Multiple Languages", isChecked: false },
-  ];
-  const [languageItems, setArrayItems] = useState(languageArray);
-  const [selectedLanguage, setLanguageItems] = useState([]);
+  const [languageItems, setArrayItems] = useRecoilState(languageArray);
+  const [selectedLanguageItems, setLanguageItems] = useRecoilState(selectedLanguage);
+
   const addLanguageItems = (data) => {
     const newList = languageItems.map((item) => {
       if (item.id === data.id) {
@@ -95,29 +80,27 @@ const FilterChips = () => {
       return item;
     });
     setArrayItems(newList);
-    const found = selectedLanguage.some(obj => obj.id === data.id);
+    const found = selectedLanguageItems.some(obj => obj.id === data.id);
     if (!found) {
-      setLanguageItems([...selectedLanguage, { id: data.id, category: data.value }]);
+      setLanguageItems([...selectedLanguageItems, { id: data.id, category: data.value }]);
     } else {
-      const filteredItems = selectedLanguage.filter(item => item.id !== data.id);
+      const filteredItems = selectedLanguageItems.filter(item => item.id !== data.id);
       setLanguageItems(filteredItems);
     }
   }
   useEffect(() => {
-    const languageString = JSON.stringify(selectedLanguage.map(obj => obj.category));
+    const languageString = JSON.stringify(selectedLanguageItems.map(obj => obj.category));
     setLanguageList(languageString);
-  }, [selectedLanguage]);
+  }, [selectedLanguageItems]);
 
   // Language End
 
   // Resolution Start
 
-  const resultionArray = [
-    { id: 1, value: "SD", isChecked: false },
-    { id: 2, value: "HD", isChecked: false },
-  ];
-  const [resolutionItems, setResItems] = useState(resultionArray);
-  const [selectedResolution, setSelectedResoltuion] = useState([]);
+
+  const [resolutionItems, setResItems] = useRecoilState(resultionsArrayList);
+  const [selectedResolutionItems, setSelectedResoltuion] = useRecoilState(selectedResolution);
+  
   const addResolutionItems = (data) => {
     const newList = resolutionItems.map((item) => {
       if (item.id === data.id) {
@@ -131,18 +114,18 @@ const FilterChips = () => {
       return item;
     });
     setResItems(newList);
-    const found = selectedResolution.some(obj => obj.id === data.id);
+    const found = selectedResolutionItems.some(obj => obj.id === data.id);
     if (!found) {
-      setSelectedResoltuion([...selectedResolution, { id: data.id, category: data.value }]);
+      setSelectedResoltuion([...selectedResolutionItems, { id: data.id, category: data.value }]);
     } else {
-      const filteredItems = selectedResolution.filter(item => item.id !== data.id);
+      const filteredItems = selectedResolutionItems.filter(item => item.id !== data.id);
       setSelectedResoltuion(filteredItems);
     }
   }
   useEffect(() => {
-    const resString = JSON.stringify(selectedResolution.map(obj => obj.category));
+    const resString = JSON.stringify(selectedResolutionItems.map(obj => obj.category));
     setResList(resString);
-  }, [selectedResolution]);
+  }, [selectedResolutionItems]);
 
   // Resolution End
 
